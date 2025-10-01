@@ -1,25 +1,25 @@
-declare module "react" {
-    interface CSSProperties {
-      [key: `--${string}`]: string | number;
-    }
+declare module 'react' {
+  interface CSSProperties {
+    [key: `--${string}`]: string | number;
+  }
 }
 
 export type Route = {
-    key: string;
-    title: string;
-    path: string;
-    component: React.ReactNode;
-    children?: Route[];
-    sidebar?: boolean;
-    icon?: React.ReactNode;
-    layout: "sidebar" | "default";
-    children: Route[];
+  key: string;
+  title: string;
+  path: string;
+  component: React.ReactNode;
+  children?: Route[];
+  sidebar?: boolean;
+  icon?: React.ReactNode;
+  layout: 'sidebar' | 'default';
+  children: Route[];
 };
 
 export interface Website {
   name: string;
   id: number;
-  state: "Started" | "Stopped"; 
+  state: 'Started' | 'Stopped';
   physicalPath: string;
   bindings: Binding;
 }
@@ -53,4 +53,3 @@ export interface MachineState {
   usedMemory: number;
   memoryUsage: number;
 }
-

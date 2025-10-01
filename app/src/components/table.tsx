@@ -111,7 +111,7 @@ export default function Table({
   const getVisiblePages = () => {
     const pages: number[] = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -119,24 +119,24 @@ export default function Table({
     } else {
       const startPage = Math.max(1, currentPage - 2);
       const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-      
+
       for (let i = startPage; i <= endPage; i++) {
         pages.push(i);
       }
     }
-    
+
     return pages;
   };
 
   return (
-    <div className={`shadow-xl border-0 overflow-hidden p-0 backdrop-blur-sm bg-surface rounded-lg ${className}`}>
+    <div
+      className={`shadow-xl border-0 overflow-hidden p-0 backdrop-blur-sm bg-surface rounded-lg ${className}`}
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-blue-500/5 to-purple-500/5 pointer-events-none" />
 
       {title && (
         <div className="pb-6 relative z-10 p-6">
-          <h2 className="text-2xl font-bold tracking-tight text-surface-primary">
-            {title}
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight text-surface-primary">{title}</h2>
         </div>
       )}
 

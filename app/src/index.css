@@ -1,7 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -118,7 +120,7 @@ body {
     color: var(--foreground);
     background-color: var(--bg-background);
   }
-  
+
   /* Light mode scrollbar */
   * {
     scrollbar-color: #d1d5db #ffffff;
@@ -131,7 +133,7 @@ body {
   *::-webkit-scrollbar-thumb:hover {
     background: #9ca3af;
   }
-  
+
   a:hover {
     color: #3291ff;
   }
@@ -143,43 +145,105 @@ body {
 /* Tailwind utility classes for custom colors */
 @layer utilities {
   /* Background colors */
-  .bg-background { background-color: var(--bg-background); }
-  .bg-surface { background-color: var(--bg-surface); }
-  .bg-primary { background-color: var(--bg-primary); }
-  .bg-warning { background-color: var(--bg-warning); }
-  .bg-success { background-color: var(--bg-success); }
-  .bg-error { background-color: var(--bg-error); }
-  .bg-muted { background-color: var(--muted); }
+  .bg-background {
+    background-color: var(--bg-background);
+  }
+  .bg-surface {
+    background-color: var(--bg-surface);
+  }
+  .bg-primary {
+    background-color: var(--bg-primary);
+  }
+  .bg-warning {
+    background-color: var(--bg-warning);
+  }
+  .bg-success {
+    background-color: var(--bg-success);
+  }
+  .bg-error {
+    background-color: var(--bg-error);
+  }
+  .bg-muted {
+    background-color: var(--muted);
+  }
 
   /* Text colors */
-  .text-background { color: var(--text-background); }
-  .text-surface { color: var(--text-surface); }
-  .text-primary { color: var(--text-primary); }
-  .text-warning { color: var(--text-warning); }
-  .text-success { color: var(--text-success); }
-  .text-error { color: var(--text-error); }
-  .text-foreground { color: var(--foreground); }
-  .text-muted-foreground { color: var(--muted-foreground); }
+  .text-background {
+    color: var(--text-background);
+  }
+  .text-surface {
+    color: var(--text-surface);
+  }
+  .text-primary {
+    color: var(--text-primary);
+  }
+  .text-warning {
+    color: var(--text-warning);
+  }
+  .text-success {
+    color: var(--text-success);
+  }
+  .text-error {
+    color: var(--text-error);
+  }
+  .text-foreground {
+    color: var(--foreground);
+  }
+  .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
 
   /* Enhanced text colors for surface backgrounds */
-  .text-surface-primary { color: var(--text-surface-primary); }
-  .text-surface-secondary { color: var(--text-surface-secondary); }
-  .text-surface-muted { color: var(--text-surface-muted); }
+  .text-surface-primary {
+    color: var(--text-surface-primary);
+  }
+  .text-surface-secondary {
+    color: var(--text-surface-secondary);
+  }
+  .text-surface-muted {
+    color: var(--text-surface-muted);
+  }
 
   /* Border colors */
-  .border-background { border-color: var(--bg-background); }
-  .border-surface { border-color: var(--bg-surface); }
-  .border-primary { border-color: var(--bg-primary); }
-  .border-warning { border-color: var(--bg-warning); }
-  .border-success { border-color: var(--bg-success); }
-  .border-error { border-color: var(--bg-error); }
-  .border-muted { border-color: var(--muted); }
+  .border-background {
+    border-color: var(--bg-background);
+  }
+  .border-surface {
+    border-color: var(--bg-surface);
+  }
+  .border-primary {
+    border-color: var(--bg-primary);
+  }
+  .border-warning {
+    border-color: var(--bg-warning);
+  }
+  .border-success {
+    border-color: var(--bg-success);
+  }
+  .border-error {
+    border-color: var(--bg-error);
+  }
+  .border-muted {
+    border-color: var(--muted);
+  }
 
   /* Ring colors for focus states */
-  .ring-background { --tw-ring-color: var(--bg-background); }
-  .ring-surface { --tw-ring-color: var(--bg-surface); }
-  .ring-primary { --tw-ring-color: var(--bg-primary); }
-  .ring-warning { --tw-ring-color: var(--bg-warning); }
-  .ring-success { --tw-ring-color: var(--bg-success); }
-  .ring-error { --tw-ring-color: var(--bg-error); }
+  .ring-background {
+    --tw-ring-color: var(--bg-background);
+  }
+  .ring-surface {
+    --tw-ring-color: var(--bg-surface);
+  }
+  .ring-primary {
+    --tw-ring-color: var(--bg-primary);
+  }
+  .ring-warning {
+    --tw-ring-color: var(--bg-warning);
+  }
+  .ring-success {
+    --tw-ring-color: var(--bg-success);
+  }
+  .ring-error {
+    --tw-ring-color: var(--bg-error);
+  }
 }

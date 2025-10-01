@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Vercel Dark Theme Color Palette */
+  --bg-background: #000000;
+  --bg-surface: #111111;
+  --bg-primary: #0070f3;
+  --bg-warning: #f5a623;
+  --bg-success: #0070f3;
+  --bg-error: #ee0000;
+
+  /* Text colors for respective backgrounds */
+  --text-background: #ffffff;
+  --text-surface: #f8f9fa;
+  --text-primary: #ffffff;
+  --text-warning: #000000;
+  --text-success: #ffffff;
+  --text-error: #ffffff;
+
+  /* Enhanced text colors for surface backgrounds */
+  --text-surface-primary: #ffffff;
+  --text-surface-secondary: #e2e8f0;
+  --text-surface-muted: #94a3b8;
+
+  /* Foreground colors for better text visibility */
+  --foreground: #ffffff;
+  --muted-foreground: #a1a1aa;
+  --muted: #27272a;
+
+  color-scheme: dark;
+  color: var(--foreground);
+  background-color: var(--bg-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--bg-primary);
+  text-decoration: inherit;
+}
+a:hover {
+  color: #3291ff;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-background);
+  color: var(--foreground);
+}
+
+/* Modern thin scrollbar styles for all browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a #111111;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Vercel Light Theme Color Palette */
+    --bg-background: #ffffff;
+    --bg-surface: #fafafa;
+    --bg-primary: #0070f3;
+    --bg-warning: #f5a623;
+    --bg-success: #0070f3;
+    --bg-error: #ee0000;
+
+    /* Text colors for respective backgrounds */
+    --text-background: #000000;
+    --text-surface: #1a202c;
+    --text-primary: #ffffff;
+    --text-warning: #000000;
+    --text-success: #ffffff;
+    --text-error: #ffffff;
+
+    /* Enhanced text colors for surface backgrounds */
+    --text-surface-primary: #1a202c;
+    --text-surface-secondary: #2d3748;
+    --text-surface-muted: #4a5568;
+
+    /* Foreground colors for better text visibility */
+    --foreground: #000000;
+    --muted-foreground: #71717a;
+    --muted: #f4f4f5;
+
+    color: var(--foreground);
+    background-color: var(--bg-background);
+  }
+  
+  /* Light mode scrollbar */
+  * {
+    scrollbar-color: #d1d5db #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+  
+  a:hover {
+    color: #3291ff;
+  }
+  button {
+    background-color: var(--bg-surface);
+  }
+}
+
+/* Tailwind utility classes for custom colors */
+@layer utilities {
+  /* Background colors */
+  .bg-background { background-color: var(--bg-background); }
+  .bg-surface { background-color: var(--bg-surface); }
+  .bg-primary { background-color: var(--bg-primary); }
+  .bg-warning { background-color: var(--bg-warning); }
+  .bg-success { background-color: var(--bg-success); }
+  .bg-error { background-color: var(--bg-error); }
+  .bg-muted { background-color: var(--muted); }
+
+  /* Text colors */
+  .text-background { color: var(--text-background); }
+  .text-surface { color: var(--text-surface); }
+  .text-primary { color: var(--text-primary); }
+  .text-warning { color: var(--text-warning); }
+  .text-success { color: var(--text-success); }
+  .text-error { color: var(--text-error); }
+  .text-foreground { color: var(--foreground); }
+  .text-muted-foreground { color: var(--muted-foreground); }
+
+  /* Enhanced text colors for surface backgrounds */
+  .text-surface-primary { color: var(--text-surface-primary); }
+  .text-surface-secondary { color: var(--text-surface-secondary); }
+  .text-surface-muted { color: var(--text-surface-muted); }
+
+  /* Border colors */
+  .border-background { border-color: var(--bg-background); }
+  .border-surface { border-color: var(--bg-surface); }
+  .border-primary { border-color: var(--bg-primary); }
+  .border-warning { border-color: var(--bg-warning); }
+  .border-success { border-color: var(--bg-success); }
+  .border-error { border-color: var(--bg-error); }
+  .border-muted { border-color: var(--muted); }
+
+  /* Ring colors for focus states */
+  .ring-background { --tw-ring-color: var(--bg-background); }
+  .ring-surface { --tw-ring-color: var(--bg-surface); }
+  .ring-primary { --tw-ring-color: var(--bg-primary); }
+  .ring-warning { --tw-ring-color: var(--bg-warning); }
+  .ring-success { --tw-ring-color: var(--bg-success); }
+  .ring-error { --tw-ring-color: var(--bg-error); }
+}

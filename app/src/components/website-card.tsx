@@ -1,5 +1,5 @@
 import type { Website } from '@/types';
-import { ExternalLink, Folder, Globe, Lock, Play, RotateCcw, Square, Trash2 } from 'lucide-react';
+import { ExternalLink, Folder, Globe, Lock, Play, RotateCcw, Square, Trash } from 'lucide-react';
 import Badge from './badge';
 import Button from './button';
 import Card from './card';
@@ -154,14 +154,8 @@ export default function WebsiteCard({
           <div className="flex-1" />
 
           {onDelete && (
-            <Button
-              variant="error"
-              appearance="soft"
-              size="sm"
-              onClick={() => onDelete(website)}
-              className="h-8 w-8 p-0"
-            >
-              <Trash2 className="h-3 w-3" />
+            <Button variant="error" appearance="soft" size="icon" onClick={() => onDelete(website)}>
+              <Trash className="h-4 w-4" />
             </Button>
           )}
         </div>

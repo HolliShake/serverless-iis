@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import Pagination from './pagination';
 import Select from './select';
 
 export type TableColumn = {
@@ -108,26 +108,6 @@ export default function Table({
     { value: '50', label: '50' },
   ];
 
-  const getVisiblePages = () => {
-    const pages: number[] = [];
-    const maxVisiblePages = 5;
-
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-    }
-
-    return pages;
-  };
-
   return (
     <div
       className={`shadow-xl border-0 overflow-hidden p-0 backdrop-blur-sm bg-surface rounded-lg ${className}`}
@@ -216,50 +196,13 @@ export default function Table({
             <span className="whitespace-nowrap">of {isLoading ? '...' : totalEntries} entries</span>
           </div>
 
-          <div className="flex items-center justify-center space-x-2 relative z-10">
-            <button
-              onClick={() => handlePageChange(1)}
-              disabled={currentPage === 1 || isLoading}
-              className="px-4 py-2 text-sm font-medium text-foreground bg-surface border border-surface rounded-lg hover:bg-primary hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <ChevronsLeft className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1 || isLoading}
-              className="px-4 py-2 text-sm font-medium text-foreground bg-surface border border-surface rounded-lg hover:bg-primary hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-
-            {getVisiblePages().map((pageNum) => (
-              <button
-                key={pageNum}
-                onClick={() => handlePageChange(pageNum)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  pageNum === currentPage
-                    ? 'text-primary bg-primary border border-primary shadow-md'
-                    : 'text-foreground bg-surface border border-surface hover:bg-primary hover:text-primary hover:border-primary'
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages || isLoading || totalPages === 0}
-              className="px-4 py-2 text-sm font-medium text-foreground bg-surface border border-surface rounded-lg hover:bg-primary hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => handlePageChange(totalPages)}
-              disabled={currentPage === totalPages || isLoading || totalPages === 0}
-              className="px-4 py-2 text-sm font-medium text-foreground bg-surface border border-surface rounded-lg hover:bg-primary hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <ChevronsRight className="h-4 w-4" />
-            </button>
+          <div className="relative z-10">
+            <Pagination
+              currentPage={currentPage}
+              totalItems={totalPages}
+              itemsPerPage={itemsPerPage}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       )}

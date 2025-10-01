@@ -3,7 +3,7 @@ import React from 'react';
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'success' | 'warning' | 'error'; // default is the default which uses bg-primary
   appearance?: 'solid' | 'soft'; // solid is default for buttons
-  size?: 'sm' | 'md' | 'lg'; // md is default
+  size?: 'sm' | 'md' | 'lg' | 'icon'; // md is default
   children: React.ReactNode;
   className?: string;
 }
@@ -29,6 +29,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         sm: 'h-8 px-3 text-sm',
         md: 'h-10 px-4 text-sm',
         lg: 'h-12 px-6 text-base',
+        icon: 'h-8 w-8 text-sm',
       };
 
       if (appearance === 'solid') {

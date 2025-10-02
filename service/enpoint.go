@@ -28,6 +28,25 @@ func GetWebsitesEndpoint(c *gin.Context) {
 	c.JSON(200, websites)
 }
 
+func GetWebsiteEndpoint(c *gin.Context) {
+	website := c.Param("name")
+	if website == "" {
+		c.JSON(400, gin.H{"error": "Website parameter is required"})
+		return
+	}
+	
+	if !WebsiteExistsByName(website) {
+		c.JSON(404, gin.H{"error": "Website not found"})
+		return
+	}
+	
+	siteInfo, err := GetByNameAction(website)
+	if err != nil {
+		c.JSON(404, err.Error())
+	}
+	c.JSON(200, siteInfo)
+}
+
 func PostCreateWebsiteEndpoint(c *gin.Context) {
 	body := c.Request.Body
 	defer body.Close()
@@ -132,4 +151,28 @@ func GetLogsEndpoint(c *gin.Context) {
 		return
 	}
 	c.JSON(200, gin.H{"logs": logs})
+}
+
+
+func GetDirEndpoint(c *gin.Context) {
+	site := c.Param("site")
+	if !WebsiteExistsByName(site) {
+		c.JSON(404, gin.H{"error": "Website not found"})
+		return
+	}
+	dirs := GetDirectoryContentAction(site)
+	c.JSON(200, dirs)
+
+}
+
+func GetDirTreeEndpoint(c *gin.Context) {
+	site := c.Param("site")
+	tree := c.Query("tree")
+	if !WebsiteExistsByName(site) {
+		c.JSON(404, gin.H{"error": "Website not found"})
+		return
+	}
+	dirs := GetDirectoryTreeAction(site, tree)
+	c.JSON(200, dirs)
+
 }

@@ -4,6 +4,17 @@ declare module 'react' {
   }
 }
 
+interface RouteKey {
+  key: string;
+  parse?: (name: string) => string;
+}
+
+interface RouteKeys {
+  Dashboard: RouteKey;
+  Websites: RouteKey;
+  ViewWebsite: RouteKey;
+}
+
 export type Route = {
   key: string;
   title: string;
@@ -52,4 +63,12 @@ export interface MachineState {
   availableMemory: number;
   usedMemory: number;
   memoryUsage: number;
+}
+
+export interface DirFile {
+  name: string;
+  size: number;
+  isDir: boolean;
+  modTime: string;
+  permission: string;
 }

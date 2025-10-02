@@ -9,12 +9,14 @@ import Select from '@/components/select';
 import WebsiteCard from '@/components/website-card';
 import { useMutate, useQuery } from '@/hooks/query';
 import WebsiteModal, { type WebsiteModalData } from '@/modal/website.modal';
+import { KEY } from '@/routing/navigation';
 import WebsiteService from '@/services/websites';
 import type { Website } from '@/types';
 import { extractError } from '@/util/error';
 import { Globe, Plus } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const WebsiteCardSkeleton = () => (
   <div className="bg-surface rounded-lg border border-muted p-4 sm:p-6 animate-pulse">
@@ -44,6 +46,8 @@ export default function AdminWebsites() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const websiteModalController = useDialogController<WebsiteModalData>();
+
+  const navigate = useNavigate();
 
   const {
     data,
@@ -182,6 +186,10 @@ export default function AdminWebsites() {
     websiteModalController.onOpen({ mode: 'edit', website: data });
   };
 
+  const handleViewWebsite = (data: Website) => {
+    navigate(KEY.ViewWebsite.parse!(data.name));
+  };
+
   const handleWebsiteSubmit = async () => {
     refetch();
   };
@@ -267,6 +275,7 @@ export default function AdminWebsites() {
                 onRestart={handleRestart}
                 onDelete={handleDelete}
                 onClick={handleEditWebsite}
+                onManage={handleViewWebsite}
               />
             ))}
           </div>

@@ -6,6 +6,10 @@ const WebsiteService = new (class {
     return await api.get('website').then((x) => x.data);
   }
 
+  async getWebsite(name: string): Promise<Website> {
+    return await api.get(`website/${name}`).then((x) => x.data);
+  }
+
   async createWebsite(website: Partial<Website>): Promise<Website> {
     return await api.post('website', website).then((x) => x.data);
   }
@@ -22,7 +26,7 @@ const WebsiteService = new (class {
     return await api.delete(`website/${name}`).then((x) => x.data);
   }
 
-  async getLogs(siteName: string): Promise<string[]> {
+  async getLogs(siteName: string): Promise<{ logs: string }> {
     return await api.get(`log/${siteName}`).then((x) => x.data);
   }
 })();

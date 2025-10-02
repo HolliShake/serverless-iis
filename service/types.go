@@ -44,6 +44,13 @@ type MachineState struct {
 	MemoryUsage     float64 `json:"memoryUsage"`
 }
 
+type DirFile struct {
+	Name       string `json:"name"`
+	Size       int64  `json:"size"`
+	IsDir      bool   `json:"isDir"`
+	ModTime    string `json:"modTime"`
+	Permission string `json:"permission"`
+}
 
 func (w Website) String() string {
 	return fmt.Sprintf(`{

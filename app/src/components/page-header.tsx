@@ -19,7 +19,7 @@ export default function PageHeader({ title, description, breadcrumbs = [] }: Pag
   // Generate breadcrumbs from current location if none provided
   const defaultBreadcrumbs =
     breadcrumbs.length === 0
-      ? location.pathname
+      ? decodeURIComponent(location.pathname)
           .split('/')
           .filter((segment) => segment !== '')
           .map((segment, index, array) => ({

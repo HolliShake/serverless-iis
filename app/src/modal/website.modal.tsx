@@ -3,6 +3,7 @@ import Dialog, { useDialogController } from '@/components/dialog';
 import Input from '@/components/input';
 import Select from '@/components/select';
 import { useMutate } from '@/hooks/query';
+import { KEY } from '@/routing/navigation';
 import WebsiteService from '@/services/websites';
 import type { Website, WebsiteRequest } from '@/types';
 import { extractError } from '@/util/error';
@@ -10,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 export interface WebsiteModalData {
@@ -65,6 +67,9 @@ export default function WebsiteModal({
     },
   });
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { mutate: create, isLoading: isCreating } = useMutate<Website, WebsiteRequest>({
     callback: async (site: WebsiteRequest) => await WebsiteService.createWebsite(site),
   });
@@ -107,6 +112,10 @@ export default function WebsiteModal({
           original: controller.data?.website?.name || '',
           site: data,
         });
+        const prevName = controller.data?.website?.name || '';
+        if (KEY.ViewWebsite.parse!(prevName) == location.pathname && prevName != data.name) {
+          navigate(KEY.ViewWebsite.parse!(data.name));
+        }
       } else {
         await create(data);
       }

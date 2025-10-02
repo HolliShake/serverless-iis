@@ -50,6 +50,7 @@ func main() {
 	// Server management
 	r.GET("/api/", GetRootEndpoint)
 	r.GET("/api/website", GetWebsitesEndpoint)
+	r.GET("/api/website/:name", GetWebsiteEndpoint)
 	r.POST("/api/website", PostCreateWebsiteEndpoint)
 	r.PUT("/api/website/:original", PutUpdateWebsiteEndpoint)
 	r.PATCH("/api/website/:site/:action", PatchStatusEndpoint)
@@ -57,5 +58,7 @@ func main() {
 	// Logs
 	r.GET("/api/log/:site", GetLogsEndpoint)
 	// Others
+	r.GET("/api/dir/:site", GetDirEndpoint)
+	r.GET("/api/dirtree/:site", GetDirTreeEndpoint)
 	r.Run(":8080")
 }

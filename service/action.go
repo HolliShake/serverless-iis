@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os/exec"
@@ -226,4 +227,82 @@ func GetLogsAction(site string) (string, error) {
 	}
 
 	return string(out), nil
+}
+
+func GetDirectoryContentAction(name string) []DirFile {
+	website, err := GetByNameAction(name)
+	if err != nil {
+		return []DirFile{}
+	}
+
+	// PowerShell command to get directory contents
+	ps := fmt.Sprintf(`Get-ChildItem -Path "%s" | ForEach-Object {
+		$item = $_
+		$modTime = $item.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+		$permission = (Get-Acl $item.FullName).Access | Select-Object -First 1 | ForEach-Object { $_.FileSystemRights.ToString() }
+		[PSCustomObject]@{
+			Name = $item.Name
+			Size = if ($item.PSIsContainer) { 0 } else { $item.Length }
+			IsDir = $item.PSIsContainer
+			ModTime = $modTime
+			Permission = if ($permission) { $permission } else { "Unknown" }
+		}
+	} | ConvertTo-Json -Depth 2`, website.PhysicalPath)
+
+	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return []DirFile{}
+	}
+
+	var files []DirFile
+	if err := json.Unmarshal(out, &files); err != nil {
+		// Try parsing as single object in case there's only one item
+		var singleFile DirFile
+		if err := json.Unmarshal(out, &singleFile); err == nil {
+			return []DirFile{singleFile}
+		}
+		return []DirFile{}
+	}
+
+	return files
+}
+
+func GetDirectoryTreeAction(name string, dirTree string) []DirFile {
+	website, err := GetByNameAction(name)
+	if err != nil {
+		return []DirFile{}
+	}
+
+	// PowerShell command to get directory contents
+	ps := fmt.Sprintf(`Get-ChildItem -Path "%s" | ForEach-Object {
+		$item = $_
+		$modTime = $item.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+		$permission = (Get-Acl $item.FullName).Access | Select-Object -First 1 | ForEach-Object { $_.FileSystemRights.ToString() }
+		[PSCustomObject]@{
+			Name = $item.Name
+			Size = if ($item.PSIsContainer) { 0 } else { $item.Length }
+			IsDir = $item.PSIsContainer
+			ModTime = $modTime
+			Permission = if ($permission) { $permission } else { "Unknown" }
+		}
+	} | ConvertTo-Json -Depth 2`, path.Join(website.PhysicalPath, dirTree))
+
+	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return []DirFile{}
+	}
+
+	var files []DirFile
+	if err := json.Unmarshal(out, &files); err != nil {
+		// Try parsing as single object in case there's only one item
+		var singleFile DirFile
+		if err := json.Unmarshal(out, &singleFile); err == nil {
+			return []DirFile{singleFile}
+		}
+		return []DirFile{}
+	}
+
+	return files
 }

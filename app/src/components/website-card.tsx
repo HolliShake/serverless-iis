@@ -1,5 +1,15 @@
 import type { Website } from '@/types';
-import { ExternalLink, Folder, Globe, Lock, Play, RotateCcw, Square, Trash } from 'lucide-react';
+import {
+  ExternalLink,
+  Folder,
+  Globe,
+  Lock,
+  Play,
+  RotateCcw,
+  Settings,
+  Square,
+  Trash,
+} from 'lucide-react';
 import Badge from './badge';
 import Button from './button';
 import Card from './card';
@@ -10,6 +20,7 @@ interface WebsiteCardProps {
   onStop?: (website: Website) => void;
   onRestart?: (website: Website) => void;
   onDelete?: (website: Website) => void;
+  onManage?: (website: Website) => void;
   onClick?: (website: Website) => void;
 }
 
@@ -19,6 +30,7 @@ export default function WebsiteCard({
   onStop,
   onRestart,
   onDelete,
+  onManage,
   onClick,
 }: WebsiteCardProps) {
   const getStatusVariant = (state: 'Started' | 'Stopped') => {
@@ -135,7 +147,10 @@ export default function WebsiteCard({
               variant="error"
               appearance="soft"
               size="sm"
-              onClick={() => onStop(website)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onStop(website);
+              }}
               className="h-8"
             >
               <Square className="h-3 w-3 mr-1.5" />
@@ -148,7 +163,10 @@ export default function WebsiteCard({
               variant="default"
               appearance="soft"
               size="sm"
-              onClick={() => onRestart(website)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRestart(website);
+              }}
               className="h-8"
             >
               <RotateCcw className="h-3 w-3 mr-1.5" />
@@ -156,10 +174,34 @@ export default function WebsiteCard({
             </Button>
           )}
 
+          {onManage && (
+            <Button
+              variant="default"
+              appearance="soft"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onManage(website);
+              }}
+              className="h-8"
+            >
+              <Settings className="h-3 w-3 mr-1.5" />
+              Manage
+            </Button>
+          )}
+
           <div className="flex-1" />
 
           {onDelete && (
-            <Button variant="error" appearance="soft" size="icon" onClick={() => onDelete(website)}>
+            <Button
+              variant="error"
+              appearance="soft"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(website);
+              }}
+            >
               <Trash className="h-4 w-4" />
             </Button>
           )}

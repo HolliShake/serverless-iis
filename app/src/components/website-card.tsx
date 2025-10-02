@@ -10,6 +10,7 @@ interface WebsiteCardProps {
   onStop?: (website: Website) => void;
   onRestart?: (website: Website) => void;
   onDelete?: (website: Website) => void;
+  onClick?: (website: Website) => void;
 }
 
 export default function WebsiteCard({
@@ -18,6 +19,7 @@ export default function WebsiteCard({
   onStop,
   onRestart,
   onDelete,
+  onClick,
 }: WebsiteCardProps) {
   const getStatusVariant = (state: 'Started' | 'Stopped') => {
     switch (state) {
@@ -42,7 +44,10 @@ export default function WebsiteCard({
   const isSecure = website.bindings.protocol.toLowerCase() === 'https' || website.bindings.ssl;
 
   return (
-    <Card className="group relative hover:border-primary/50">
+    <Card
+      className="group relative hover:border-primary/50 cursor-pointer"
+      onClick={onClick ? () => onClick(website) : undefined}
+    >
       {/* Content */}
       <div className="space-y-4">
         {/* Header */}

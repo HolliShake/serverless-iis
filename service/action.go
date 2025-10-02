@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/shirou/gopsutil/host"
@@ -120,6 +121,17 @@ func ControlWebsiteAction(action WebsiteAction, site string) error {
 }
 
 func CreateWebsiteAction(name string, protocol string, hostOrDomain string, port int) error {
+	// Remove spaces from website name to ensure compatibility
+	name = strings.ReplaceAll(name, " ", "")
+	
+	// Check if a binding with the same protocol, host, and port already exists
+	checkBindingPS := fmt.Sprintf(`Import-Module WebAdministration; Get-WebBinding | Where-Object { $_.protocol -eq "%s" -and $_.bindingInformation -like "*:%d:%s" }`, protocol, port, hostOrDomain)
+	checkCmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", checkBindingPS)
+	checkOut, err := checkCmd.CombinedOutput()
+	if err == nil && len(strings.TrimSpace(string(checkOut))) > 0 {
+		return fmt.Errorf("binding already exists for %s://%s:%d", protocol, hostOrDomain, port)
+	}
+	
 	path := path.Join("C:", "inetpub", "wwwroot", name)
 
 	ps := fmt.Sprintf(`Import-Module WebAdministration; if (-Not (Test-Path "%s")) { New-Item -Path "%s" -ItemType Directory | Out-Null }; New-Website -Name "%s" -Port %d -PhysicalPath "%s" -ApplicationPool "DefaultAppPool"`, path, path, name, port, path)
@@ -131,27 +143,65 @@ func CreateWebsiteAction(name string, protocol string, hostOrDomain string, port
 	return nil
 }
 
-func UpdateWebsiteAction(name string, protocol string, hostOrDomain string, port int) error {
-	// Get current website to find existing port
-	website, err := GetByNameAction(name)
+func UpdateWebsiteAction(original string, name string, protocol string, hostOrDomain string, port int) error {
+	// Remove spaces from website name to ensure compatibility
+	name = strings.ReplaceAll(name, " ", "")
+	
+	// Get current website to find existing binding and physical path
+	website, err := GetByNameAction(original)
 	if err != nil {
-		return fmt.Errorf("failed to get website %s: %v", name, err)
+		return fmt.Errorf("failed to get website %s: %v", original, err)
 	}
 
+	currentProtocol := website.Binding.Protocol
 	currentPort := website.Binding.Port
+	currentHost := website.Binding.Host
+	physicalPath := website.PhysicalPath
 
-	ps := fmt.Sprintf(`Import-Module WebAdministration; Remove-WebBinding -Name "%s" -Protocol %s -Port %d; New-WebBinding -Name "%s" -Protocol %s -Port %d -IPAddress * -HostHeader "%s"`,
-		name, protocol, currentPort, name, protocol, port, hostOrDomain)
-	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("failed to update website %s: %v\nOutput: %s", name, err, string(out))
+	// If name changed OR protocol/port mismatch, delete and recreate
+	if original != name || currentProtocol != protocol || currentPort != port {
+		// Delete the original website (but preserve physical path)
+		ps := fmt.Sprintf(`Import-Module WebAdministration; Remove-Website -Name "%s"`, original)
+		cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			return fmt.Errorf("failed to delete original website %s: %v\nOutput: %s", original, err, string(out))
+		}
+		
+		// Create the new website with the new name, protocol, and port, retaining physical path
+		ps = fmt.Sprintf(`Import-Module WebAdministration; New-Website -Name "%s" -Port %d -PhysicalPath "%s" -ApplicationPool "DefaultAppPool"`, name, port, physicalPath)
+		cmd = exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
+		out, err = cmd.CombinedOutput()
+		if err != nil {
+			return fmt.Errorf("failed to create new website %s: %v\nOutput: %s", name, err, string(out))
+		}
+		return nil
 	}
+	
+	// Only host changed - update binding
+	if currentHost != hostOrDomain {
+		// Remove existing binding and add new one
+		ps := fmt.Sprintf(`Import-Module WebAdministration; 
+			try { Remove-WebBinding -Name "%s" -Protocol "%s" -Port %d -HostHeader "%s" -ErrorAction SilentlyContinue } catch {}; 
+			New-WebBinding -Name "%s" -Protocol "%s" -Port %d -IPAddress * -HostHeader "%s"`,
+			original, currentProtocol, currentPort, currentHost, name, protocol, port, hostOrDomain)
+		cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			return fmt.Errorf("failed to update website %s: %v\nOutput: %s", name, err, string(out))
+		}
+	}
+	
 	return nil
 }
 
 func DeleteWebsiteAction(name string) error {
-	ps := fmt.Sprintf(`Import-Module WebAdministration; Remove-Website -Name "%s"`, name)
+	// Delete the website and its physical path
+	ps := fmt.Sprintf(`Import-Module WebAdministration; 
+		$site = Get-Website -Name "%s";
+		$path = $site.physicalPath;
+		Remove-Website -Name "%s";
+		if (Test-Path $path) { Remove-Item -Path $path -Recurse -Force }`, name, name)
 	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps)
 	out, err := cmd.CombinedOutput()
 	if err != nil {

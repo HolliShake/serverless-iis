@@ -10,8 +10,8 @@ const WebsiteService = new (class {
     return await api.post('website', website).then((x) => x.data);
   }
 
-  async updateWebsite(website: Partial<Website>): Promise<Website> {
-    return await api.put('website/', website).then((x) => x.data);
+  async updateWebsite(original: string, website: Partial<Website>): Promise<Website> {
+    return await api.put('website/' + original, website).then((x) => x.data);
   }
 
   async updateWebsiteStatus(siteName: string, action: string): Promise<void> {

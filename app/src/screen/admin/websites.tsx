@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@/components/button';
+import { useDialogController } from '@/components/dialog';
 import Input from '@/components/input';
 import PageHeader from '@/components/page-header';
 import Pagination from '@/components/pagination';
@@ -7,6 +8,7 @@ import type { SelectItem } from '@/components/select';
 import Select from '@/components/select';
 import WebsiteCard from '@/components/website-card';
 import { useMutate, useQuery } from '@/hooks/query';
+import WebsiteModal, { type WebsiteModalData } from '@/modal/website.modal';
 import WebsiteService from '@/services/websites';
 import type { Website } from '@/types';
 import { extractError } from '@/util/error';
@@ -40,6 +42,8 @@ export default function AdminWebsites() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const websiteModalController = useDialogController<WebsiteModalData>();
 
   const {
     data,
@@ -171,8 +175,15 @@ export default function AdminWebsites() {
   };
 
   const handleCreateWebsite = () => {
-    console.log('Creating new website');
-    // TODO: Implement create website functionality
+    websiteModalController.onOpen({ mode: 'create' });
+  };
+
+  const handleEditWebsite = (data: Website) => {
+    websiteModalController.onOpen({ mode: 'edit', website: data });
+  };
+
+  const handleWebsiteSubmit = async () => {
+    refetch();
   };
 
   return (
@@ -255,6 +266,7 @@ export default function AdminWebsites() {
                 onStop={handleStop}
                 onRestart={handleRestart}
                 onDelete={handleDelete}
+                onClick={handleEditWebsite}
               />
             ))}
           </div>
@@ -271,6 +283,8 @@ export default function AdminWebsites() {
           </div>
         )}
       </div>
+
+      <WebsiteModal controller={websiteModalController} onSubmit={handleWebsiteSubmit} />
     </section>
   );
 }

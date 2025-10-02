@@ -51,7 +51,7 @@ func main() {
 	r.GET("/api/", GetRootEndpoint)
 	r.GET("/api/website", GetWebsitesEndpoint)
 	r.POST("/api/website", PostCreateWebsiteEndpoint)
-	r.PUT("/api/website/", PutUpdateWebsiteEndpoint)
+	r.PUT("/api/website/:original", PutUpdateWebsiteEndpoint)
 	r.PATCH("/api/website/:site/:action", PatchStatusEndpoint)
 	r.DELETE("/api/website/:name", DeleteWebsiteEndpoint)
 	// Logs

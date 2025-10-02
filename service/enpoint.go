@@ -55,6 +55,7 @@ func PostCreateWebsiteEndpoint(c *gin.Context) {
 }
 
 func PutUpdateWebsiteEndpoint(c *gin.Context) {
+	original := c.Param("original")
 	body := c.Request.Body
 	defer body.Close()
 	bodyBytes, err := io.ReadAll(body)
@@ -69,11 +70,11 @@ func PutUpdateWebsiteEndpoint(c *gin.Context) {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	if !WebsiteExistsByName(website.Name) {
+	if !WebsiteExistsByName(original) {
 		c.JSON(404, gin.H{"error": "Website not found"})
 		return
 	}
-	err = UpdateWebsiteAction(website.Name, website.Protocol, website.HostOrDomain, website.Port)
+	err = UpdateWebsiteAction(original, website.Name, website.Protocol, website.HostOrDomain, website.Port)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
